@@ -1,25 +1,37 @@
 import Vue from 'vue'
-import * as elementUi from 'element-ui'
+import {
+  Form, FormItem, Input, Button, Container,
+  Header, Aside, Main, Menu, MenuItem, Submenu, Breadcrumb,
+  BreadcrumbItem, Table, TableColumn, Pagination, Dialog,
+  Row, Col, Card, Switch, Message, MessageBox, Tooltip,
+  Dropdown, DropdownItem, DropdownMenu
+} from 'element-ui'
 
-Vue.use(elementUi.Form)
-Vue.use(elementUi.FormItem)
-Vue.use(elementUi.Input)
-Vue.use(elementUi.Button)
-Vue.use(elementUi.Container)
-Vue.use(elementUi.Header)
-Vue.use(elementUi.Aside)
-Vue.use(elementUi.Main)
-Vue.use(elementUi.Menu)
-Vue.use(elementUi.MenuItem)
-Vue.use(elementUi.Submenu)
-Vue.use(elementUi.Breadcrumb)
-Vue.use(elementUi.BreadcrumbItem)
-Vue.use(elementUi.Table)
-Vue.use(elementUi.TableColumn)
-Vue.use(elementUi.Pagination)
-Vue.use(elementUi.Dialog)
-Vue.use(elementUi.Row)
-Vue.use(elementUi.Col)
-Vue.use(elementUi.Card)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Input)
+Vue.use(Button)
+Vue.use(Container)
+Vue.use(Header)
+Vue.use(Aside)
+Vue.use(Main)
+Vue.use(Menu)
+Vue.use(MenuItem)
+Vue.use(Submenu)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
+Vue.use(Dialog)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Card)
+Vue.use(Tooltip)
+Vue.use(Switch)
+Vue.use(Dropdown)
+Vue.use(DropdownItem)
+Vue.use(DropdownMenu)
 
-Vue.prototype.$message = elementUi.Message
+Vue.prototype.$message = Message
+Vue.prototype.$msgBox = MessageBox

@@ -12,5 +12,9 @@ html, body, #root {
 }
 
 .el-table {
-    margin-top: 15px;
+    margin: 15px 0;
+}
+
+.el-switch {
+    transform: scale(0.9);
 }
