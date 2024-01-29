@@ -38,8 +38,11 @@
         </el-table-column>
         <el-table-column prop="is_superuser" label="管理员操作">
           <template slot-scope="{ row }">
-            <el-tooltip v-if="row.id !== 1" content="设置">
-              <el-button size="mini" @click="editCertain(row)" @close="resetForm('edit')" icon="el-icon-setting">
+            <el-tooltip v-if="row.id !== 1" content="设置角色">
+              <el-button size="mini" @click="editRoles(row)" icon="el-icon-setting" type="warning"> </el-button>
+            </el-tooltip>
+            <el-tooltip v-if="row.id !== 1" content="编辑用户">
+              <el-button size="mini" @click="editCertain(row)" @close="resetForm('edit')" icon="el-icon-s-opportunity">
               </el-button>
             </el-tooltip>
             <el-tooltip v-if="row.id !== 1" content="删除用户">
@@ -124,6 +127,24 @@
         <el-button type="primary" @click="adChpwdCertain">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 设置角色 -->
+    <el-dialog title="设置权限" :visible.sync="editRoleDialogVisible" @close="resetRole()">
+      <el-tree
+        :data="roleslist"
+        show-checkbox
+        default-expand-all
+        node-key="id"
+        ref="tree"
+        highlight-current
+        :props="defaultProps"
+        :default-checked-keys="setRoleList"
+      >
+      </el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setRole">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -150,6 +171,13 @@ export default {
       }
     }
     return {
+      // 设置角色
+      editRoleDialogVisible: false,
+      defaultProps: { label: 'name' },
+      roleslist: [],
+      currentId: '',
+      setRoleList: [],
+      currentUsername: '',
       // 激活
       activeValue: '',
       // 分页
@@ -228,7 +256,7 @@ export default {
       this.$refs[name].validate(async vaild => {
         if (vaild) {
           console.log(this.addForm, '准备发送到后台了')
-          const { data: response } = await this.$http.post('users/', this.addForm)
+          const { data: response } = await this.$http.post('users/mgr/', this.addForm)
           if (response.code) {
             return this.$message.error(response.message)
           }
@@ -251,7 +279,7 @@ export default {
       const name = 'adChpwd'
       this.$refs[name].validate(async vaild => {
         if (vaild) {
-          const { data: response } = await this.$http.post(`users/${this.adChpwdForm.id}/adChpwd/`, this.adChpwdForm)
+          const { data: response } = await this.$http.post(`users/mgr/${this.adChpwdForm.id}/adChpwd/`, this.adChpwdForm)
           if (response.code) {
             return this.$message.error(response.message)
           }
@@ -271,7 +299,7 @@ export default {
       const { id } = this.editForm
       this.$refs[name].validate(async vaild => {
         if (vaild) {
-          const { data: response } = await this.$http.patch(`users/${id}/`, this.editForm)
+          const { data: response } = await this.$http.patch(`users/mgr/${id}/`, this.editForm)
           if (response.code) {
             return this.$message.error(response.message)
           }
@@ -290,7 +318,7 @@ export default {
           type: 'error'
         })
         .then(async () => {
-          const { data: response } = await this.$http.delete(`users/${id}/`)
+          const { data: response } = await this.$http.delete(`users/mgr/${id}/`)
           if (response.code) {
             return this.$message.error(response.message)
           }
@@ -307,12 +335,42 @@ export default {
           })
         })
     },
+    // 设置角色
+    async editRoles(row) {
+      const { id, username } = row
+      this.currentId = id
+      this.currentUsername = username
+      this.editRoleDialogVisible = true
+      const { data: response } = await this.$http.get(`users/mgr/${this.currentId}/roles/`)
+      if (response.code) {
+        return this.$message.error(response.message)
+      }
+      this.roleslist = response.roleList
+      this.setRoleList = response.roles
+    },
+    async setRole() {
+      console.log(this.$refs.tree.getCheckedKeys())
+      this.setRoleList = this.$refs.tree.getCheckedKeys()
+      const { data: response } = await this.$http.patch(`users/mgr/${this.currentId}/roles/`, {
+        group_list: this.setRoleList
+      })
+      console.log(response)
+      if (response.code) {
+        return this.$message.error(response.message)
+      }
+      this.$message.success('用户' + this.currentUsername + '角色设置成功')
+      this.editRoleDialogVisible = false
+    },
+    resetRole() {
+      this.roleslist = []
+      this.setRoleList = []
+    },
 
     async getlist(page = 1) {
       if (!page) {
         page = 1
       }
-      const { data: response } = await this.$http.get('users/', {
+      const { data: response } = await this.$http.get('users/mgr/', {
         params: { page, search: this.search }
       })
       if (response.code) {
@@ -323,7 +381,7 @@ export default {
     },
     async handleActive(row) {
       console.log(row)
-      await this.$http.patch(`users/${row.id}/`, { is_active: row.is_active })
+      await this.$http.patch(`users/mgr/${row.id}/`, { is_active: row.is_active })
     }
   }
 }

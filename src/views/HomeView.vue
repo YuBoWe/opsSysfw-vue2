@@ -145,7 +145,7 @@ export default {
       }
     },
     async getUserInfo() {
-      const { data: response } = await this.$http.get('users/whoami/')
+      const { data: response } = await this.$http.get('users/mgr/whoami/')
       if (response.code) {
         return this.$message.error(response.message)
       }
@@ -156,7 +156,7 @@ export default {
       const name = 'chpwd'
       this.$refs[name].validate(async valid => {
         if (valid) {
-          const { data: response } = await this.$http.post('users/myselfChpwd/', this.chpwdForm)
+          const { data: response } = await this.$http.post('users/mgr/myselfChpwd/', this.chpwdForm)
           if (response.code) {
             return this.$message.error(response.message)
           }

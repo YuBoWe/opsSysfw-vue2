@@ -4,7 +4,7 @@ import {
   Header, Aside, Main, Menu, MenuItem, Submenu, Breadcrumb,
   BreadcrumbItem, Table, TableColumn, Pagination, Dialog,
   Row, Col, Card, Switch, Message, MessageBox, Tooltip,
-  Dropdown, DropdownItem, DropdownMenu
+  Dropdown, DropdownItem, DropdownMenu, Tree
 } from 'element-ui'
 
 Vue.use(Form)
@@ -32,6 +32,7 @@ Vue.use(Switch)
 Vue.use(Dropdown)
 Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
+Vue.use(Tree)
 
 Vue.prototype.$message = Message
 Vue.prototype.$msgBox = MessageBox
