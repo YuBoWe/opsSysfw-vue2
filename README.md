@@ -1,24 +1,59 @@
-# mm-vue2
+# oo运维系统后端
 
-## Project setup
-```
-yarn install
-```
+vue版本：2
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+ui：element ui
 
-### Compiles and minifies for production
-```
-yarn build
-```
+## Usage
 
-### Lints and fixes files
-```
-yarn lint
+### 物理部署
+
+安装nginx
+
+```sh
+apt-get install -y nginx
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+将dist目录的内容放在`/var/www/html`中，删除默认的html
+
+
+
+配置文件：
+
+```nginx
+server {
+        listen 80 default_server;
+        server_name localhost;
+        location / {
+                root /var/www/html;
+                index index.html index.htm;
+        }
+        location ^~ /api/v1 {
+                rewrite ^/api/v1(/.*) $1 break;
+                proxy_pass http://127.0.0.1:8000;
+        }
+}
+```
+
+检查配置文件，并重启nginx
+
+```sh
+nginx -t
+nginx -s reload
+```
+
+
+
+登录即可：
+
+```
+默认管理员：
+admin
+密码：
+123456
+```
+
+
+
